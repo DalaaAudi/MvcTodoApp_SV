@@ -1,37 +1,36 @@
-﻿@model List<MvcTodoApp.Models.TaskItem>
+@model List<MvcTodoApp.Models.TaskItem>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>تطبيق المهام اليومية - MVC</title>
-</head>
-<body>
-    <h1>قائمة المهام اليومية</h1>
-    <ul>
-        @foreach (var task in Model)
-        {
-            <li>
-                @if(task.IsComplete)
-                {
-                    <s>@task.Title</s>
-                }
-                else
-                {
-                    @task.Title
-                    <form method="post" asp-action="CompleteTask" style="display:inline;">
-                        <input type="hidden" name="id" value="@task.Id" />
-                        <button type="submit">اكتملت</button>
-                    </form>
+<h2>قائمة المهام</h2>
 
-                }
-            </li>
-        }
-    </ul>
+<form asp-action="@(ViewBag.EditMode != null ? "EditTask" : "AddTask")" method="post">
+    <input type="hidden" name="id" value="@ViewBag.EditId" />
+    <input type="text" name="title" value="@ViewBag.EditTitle" placeholder="أدخل عنوان المهمة" required />
+    <button type="submit">
+        @(ViewBag.EditMode != null ? "تعديل المهمة" : "إضافة المهمة")
+    </button>
+</form>
 
-    <form method="post" asp-action="AddTask">
-        <input type="text" name="title" placeholder="أضف مهمة جديدة" />
-        <button type="submit">إضافة</button>
-    </form>
-</body>
-</html>
+<table>
+    <tr>
+        <th>عنوان المهمة</th>
+        <th>الحالة</th>
+        <th>إجراءات</th>
+    </tr>
+    @foreach (var task in Model)
+    {
+        <tr>
+            <td>@task.Title</td>
+            <td>@(task.IsComplete ? "✓" : "✗")</td>
+            <td>
+                <form asp-action="CompleteTask" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@task.Id" />
+                    <button type="submit">اكتمال</button>
+                </form>
+                <form asp-action="Edit" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@task.Id" />
+                    <button type="submit">تعديل</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
