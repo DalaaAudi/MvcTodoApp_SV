@@ -20,6 +20,7 @@ namespace MvcTodoApp.Controllers
         /// </summary>
         public IActionResult Index()
         {
+            // TODO: إضافة دعم للبحث أو التصفية حسب الحالة (مكتملة / غير مكتملة)
             return View(tasks);
         }
 
@@ -29,6 +30,7 @@ namespace MvcTodoApp.Controllers
         [HttpPost]
         public IActionResult AddTask(string title)
         {
+            // TODO: إضافة تحقق من صحة الإدخال (مثلاً منع إضافة مهمة فارغة أو مكررة)
             if (!string.IsNullOrEmpty(title))
             {
                 int newId = tasks.Max(t => t.Id) + 1;
@@ -47,6 +49,8 @@ namespace MvcTodoApp.Controllers
             var task = tasks.FirstOrDefault(t => t.Id == id);
             if (task != null)
                 task.IsComplete = true;
+
+            // TODO: إضافة ميزة إلغاء تحديد المهمة كمكتملة (Toggle Complete)
             return RedirectToAction("Index");
         }
     }
